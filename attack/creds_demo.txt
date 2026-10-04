@@ -1,0 +1,25 @@
+# Leaked username:password pairs for the demo attack. Only alice:demo1234 is correct.
+alice:123456
+bob:password
+charlie:qwerty
+david:letmein
+emma:iloveyou
+alice:password1
+frank:111111
+grace:sunshine
+bob:123456789
+henry:football
+isla:monkey
+charlie:dragon
+jack:princess
+alice:qwerty123
+kate:welcome
+liam:abc123
+bob:superman
+mia:trustno1
+noah:baseball
+olivia:shadow
+alice:demo1234
+peter:master
+charlie:hello123
+quinn:freedom
