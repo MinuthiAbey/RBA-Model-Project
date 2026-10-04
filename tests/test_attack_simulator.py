@@ -1,6 +1,6 @@
 import pytest
 
-from attack.stuffing import CREDS, check_target, load_credentials
+from tools.attack_simulator import CREDS, check_target, load_credentials
 
 
 @pytest.mark.parametrize("url", ["http://example.com", "https://8.8.8.8/login", "http://127.0.0.1.evil.com"])

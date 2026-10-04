@@ -2,19 +2,17 @@
 
 import sys
 import time
-from pathlib import Path
 
 import joblib
 import numpy as np
 import pandas as pd
 import requests
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from engine.config import load_config  # noqa: E402
-from engine.history import InMemoryHistory  # noqa: E402
-from engine.scorers.base import Scorer  # noqa: E402
-from research.common import MODELS, SCORERS, classify, load_period, replay, save_table, to_events  # noqa: E402
-from api.events import DEMO_AGENTS  # noqa: E402
+from api.events import DEMO_AGENTS
+from engine.config import load_config
+from engine.history import InMemoryHistory
+from engine.scorers.base import Scorer
+from pipeline.common import MODELS, SCORERS, classify, load_period, replay, save_table, to_events
 
 SAMPLE = 1000
 DEMO_URL = "http://127.0.0.1:3000"

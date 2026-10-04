@@ -1,4 +1,4 @@
-# Credential-stuffing simulator for the local DemoShop. It refuses to target anything but this machine.
+# Credential-stuffing simulator for the local LightRBA platform. It refuses to target anything but this machine.
 
 import argparse
 import random

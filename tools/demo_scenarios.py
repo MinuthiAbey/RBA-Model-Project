@@ -1,14 +1,12 @@
-# Runs the four presentation scenarios against the local DemoShop, pausing so the presenter can talk.
+# Runs the four presentation scenarios against the local LightRBA platform, pausing so the presenter can talk.
 
 import argparse
 import sys
-from pathlib import Path
 
 import requests
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from attack import stuffing  # noqa: E402
-from api.events import DEMO_AGENTS  # noqa: E402
+from api.events import DEMO_AGENTS
+from tools import attack_simulator
 
 TARGET = "http://127.0.0.1:3000"
 
@@ -53,7 +51,7 @@ def main() -> int:
     pause()
 
     print("\n4. Credential stuffing: leaked passwords tried from a few attacker IPs")
-    return stuffing.main(["--target", TARGET, "--rate", "4"])
+    return attack_simulator.main(["--target", TARGET, "--rate", "4"])
 
 
 if __name__ == "__main__":

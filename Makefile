@@ -29,20 +29,20 @@ figures:
 
 research: data attacks train evaluate figures
 
-# Risk engine service + DemoShop web app (shop, sign-in and /dashboard). Ctrl+C stops both.
+# Risk engine service + LightRBA web app (shop, sign-in and /dashboard). Ctrl+C stops both.
 demo:
 	@trap 'kill 0' INT TERM EXIT; \
 	$(PY) -m api.server & \
 	cd demo && npm run dev
 
 attack:
-	$(PY) -m attack.stuffing
+	$(PY) -m tools.attack_simulator
 
 scenarios:
-	$(PY) scripts/demo_scenarios.py
+	$(PY) -m tools.demo_scenarios
 
 benchmark:
-	$(PY) scripts/benchmark_latency.py
+	$(PY) -m tools.benchmark_latency
 
 test:
 	$(PY) -m pytest
