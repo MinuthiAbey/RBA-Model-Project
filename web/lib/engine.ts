@@ -29,6 +29,9 @@ export const engine = {
   info: () => call<{ scorer: string; challenge_budget: number }>("/info"),
   profiles: () => call<Record<string, Profile>>("/profiles"),
   options: () => call<LabOptions>("/options"),
+  checkPassword: (username: string, password: string) => call<{ ok: boolean }>("/accounts/check", { username, password }),
+  register: (request: LoginRequest, password: string) =>
+    call<{ created: boolean; error?: string; context?: EngineContext }>("/accounts/register", { ...request, password }),
   score: (request: LoginRequest) => call<EngineScore>("/score", request),
   failed: (request: LoginRequest) => call<{ context: EngineContext }>("/failed", request),
   // verified = the user passed a one-time code, which also lets the engine remember this place and device.

@@ -1,11 +1,10 @@
-import { randomBytes, randomInt, scryptSync, timingSafeEqual } from "node:crypto";
+import { randomBytes, randomInt } from "node:crypto";
 import type { LoginRecord, OtpNotice, StreamMessage } from "./types";
 
-// Everything lives in memory and is seeded on start-up, so every demo run begins from the same state.
+// Sessions, pending codes and the live decision feed live in memory; accounts and history are in the API's database.
 type PendingOtp = { username: string; code: string; eventId: string; tries: number; record: LoginRecord };
 
 type Store = {
-  passwords: Map<string, { salt: string; hash: string }>;
   sessions: Map<string, string>;
   pendingOtps: Map<string, PendingOtp>;
   records: LoginRecord[];
@@ -13,32 +12,15 @@ type Store = {
   listeners: Set<(message: StreamMessage) => void>;
 };
 
-const DEMO_PASSWORD = "demo1234";
-const DEMO_USERS = ["alice", "bob", "charlie"];
 const MAX_RECORDS = 2000;
 
-function hashPassword(password: string, salt: string): string {
-  return scryptSync(password, salt, 32).toString("hex");
-}
-
 function createStore(): Store {
-  const passwords = new Map<string, { salt: string; hash: string }>();
-  for (const user of DEMO_USERS) {
-    const salt = randomBytes(16).toString("hex");
-    passwords.set(user, { salt, hash: hashPassword(DEMO_PASSWORD, salt) });
-  }
-  return { passwords, sessions: new Map(), pendingOtps: new Map(), records: [], latestOtp: null, listeners: new Set() };
+  return { sessions: new Map(), pendingOtps: new Map(), records: [], latestOtp: null, listeners: new Set() };
 }
 
 // Next.js reloads modules in development; keeping the store on globalThis stops that from wiping it.
 const globalForStore = globalThis as unknown as { demoStore?: Store };
 export const store = (globalForStore.demoStore ??= createStore());
-
-export function checkPassword(username: string, password: string): boolean {
-  const saved = store.passwords.get(username);
-  if (!saved) return false;
-  return timingSafeEqual(Buffer.from(hashPassword(password, saved.salt), "hex"), Buffer.from(saved.hash, "hex"));
-}
 
 export function newToken(): string {
   return randomBytes(24).toString("hex");

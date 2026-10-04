@@ -1,6 +1,6 @@
 import { engine, type LoginRequest } from "./engine";
 import { makeRecord } from "./http";
-import { addRecord, announceOtp, checkPassword, newOtpCode, newToken, startSession, store } from "./store";
+import { addRecord, announceOtp, newOtpCode, newToken, startSession, store } from "./store";
 import type { EngineScore } from "./types";
 
 export type Attempt =
@@ -12,7 +12,7 @@ export type Attempt =
 // One sign-in attempt: check the password, score the risk, act on the decision. Used by the sign-in page and the lab.
 export async function attemptSignIn(login: LoginRequest, password: string): Promise<Attempt> {
   // Wrong passwords are never scored, but the engine still counts them for its velocity checks.
-  if (!checkPassword(login.username, password)) {
+  if (!(await engine.checkPassword(login.username, password)).ok) {
     const { context } = await engine.failed(login);
     addRecord(makeRecord(login.username, "wrong_password", context));
     return { outcome: "wrong_password" };
