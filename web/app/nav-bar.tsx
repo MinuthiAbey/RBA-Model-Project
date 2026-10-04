@@ -13,6 +13,7 @@ import { NAVY } from "./theme";
 const LINKS = [
   { href: "/", label: "Overview" },
   { href: "/demo", label: "Live demo" },
+  { href: "/models", label: "Models" },
   { href: "/dashboard", label: "Security dashboard" },
 ];
 
@@ -36,6 +37,9 @@ export default function NavBar({ username }: { username: string | null }) {
             </Button>
           ))}
         </Box>
+        {!username && (
+          <Button component={Link} href="/signup" sx={{ color: "white", ml: 1 }}>Create account</Button>
+        )}
         <Button component={Link} href={username ? "/account" : "/login"} variant="contained" color="secondary" sx={{ ml: 1 }}>
           {username ? `Signed in as ${username}` : "Sign in"}
         </Button>
