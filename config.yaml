@@ -24,7 +24,7 @@ rules:
   user_failures_1h_ge_3: 15
   ip_distinct_users_1h_ge_5: 25
 iforest: {n_estimators: 200}
-rforest: {n_estimators: 300, class_weight: balanced, min_samples_leaf: 20}
+rforest: {n_estimators: 300, class_weight: null, min_samples_leaf: 20}  # unweighted: balanced weights did worse on validation
 demo:
   active_scorer: rforest      # rules | freeman | iforest | rforest
   challenge_budget: 0.20      # one of thresholds.operating_points, all chosen on the validation period

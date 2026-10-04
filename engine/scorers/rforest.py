@@ -16,7 +16,7 @@ class RandomForestScorer(Scorer):
 
     name = "rforest"
 
-    def __init__(self, n_estimators: int, class_weight: str, min_samples_leaf: int, seed: int) -> None:
+    def __init__(self, n_estimators: int, class_weight: str | None, min_samples_leaf: int, seed: int) -> None:
         super().__init__()
         self.model = RandomForestClassifier(n_estimators=n_estimators, class_weight=class_weight,
                                             min_samples_leaf=min_samples_leaf, random_state=seed, n_jobs=-1)
