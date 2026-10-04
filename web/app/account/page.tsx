@@ -20,7 +20,7 @@ export default async function AccountPage() {
       <Card sx={{ boxShadow: "0 12px 40px rgba(15,23,42,0.08)" }}>
         <CardContent sx={{ p: 4 }}>
           <Chip icon={<CheckCircleOutlinedIcon />} label="Signed in" color="success" />
-          <Typography variant="h3" sx={{ mt: 2 }}>Welcome back, {username}</Typography>
+          <Typography variant="h3" sx={{ mt: 2 }}>Welcome, {username}</Typography>
           <Typography color="text.secondary" sx={{ mt: 2 }}>
             This sign-in passed the risk check and has been added to your login history, so next time this device
             and location will look familiar. Sign-ins that are refused or fail the one-time code never are.

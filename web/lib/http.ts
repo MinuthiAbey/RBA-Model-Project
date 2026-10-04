@@ -22,6 +22,11 @@ export function deviceLabel(context: EngineContext): string {
   return `${context.device_type} · ${context.browser} · ${context.os}`;
 }
 
+const EXPLANATIONS: Partial<Record<LoginRecord["outcome"], string>> = {
+  wrong_password: "Wrong password (not scored)",
+  signed_up: "New account; this place and device become its first known sign-in",
+};
+
 export function makeRecord(username: string, outcome: LoginRecord["outcome"], context: EngineContext,
                            score: { score: number; explanation: string; scoring_ms: number } | null = null): LoginRecord {
   return {
@@ -30,7 +35,7 @@ export function makeRecord(username: string, outcome: LoginRecord["outcome"], co
     username,
     outcome,
     score: score?.score ?? null,
-    explanation: score?.explanation ?? (outcome === "wrong_password" ? "Wrong password (not scored)" : ""),
+    explanation: score?.explanation ?? EXPLANATIONS[outcome] ?? "",
     scoringMs: score?.scoring_ms ?? null,
     ip: context.ip,
     country: context.country,

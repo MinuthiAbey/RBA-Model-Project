@@ -29,6 +29,7 @@ export const OUTCOMES: Record<LoginRecord["outcome"], { label: string; tone: Ton
   wrong_password: { label: "Wrong password", tone: "default", filled: false },
   otp_passed: { label: "Code passed", tone: "success", filled: false },
   otp_failed: { label: "Code failed · blocked", tone: "error", filled: true },
+  signed_up: { label: "New account", tone: "success", filled: false },
 };
 
 const toneColour = (tone: Tone) => (tone === "default" ? theme.palette.text.secondary : theme.palette[tone].main);

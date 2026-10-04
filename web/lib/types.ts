@@ -5,7 +5,7 @@ export type LoginRecord = {
   id: string;
   time: string;
   username: string;
-  outcome: Decision | "wrong_password" | "otp_passed" | "otp_failed";
+  outcome: Decision | "wrong_password" | "otp_passed" | "otp_failed" | "signed_up";
   score: number | null;
   explanation: string;
   scoringMs: number | null;
