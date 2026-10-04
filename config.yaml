@@ -1,0 +1,31 @@
+seed: 42
+sample_users: 300000
+splits: {train: 0.6, val: 0.2, test: 0.2}
+cold_start_buckets: [[0,0],[1,2],[3,5],[6,10],[11,20],[21,null]]
+attacks:
+  types: [naive, vpn, targeted]
+  min_attacks_per_bucket: 500
+thresholds:
+  target_legit_challenge_rate: 0.05
+  max_legit_block_rate: 0.005
+  operating_points: [0.01, 0.05, 0.10, 0.20]
+rules:
+  new_country: 30
+  new_asn: 20
+  new_ip: 10
+  new_device_type: 15
+  new_browser: 10
+  new_os: 10
+  unusual_hour: 10
+  user_failures_1h_ge_3: 15
+  ip_distinct_users_1h_ge_5: 25
+iforest: {n_estimators: 200}
+rforest: {n_estimators: 300, class_weight: balanced, min_samples_leaf: 20}
+demo:
+  active_scorer: rforest      # rules | freeman | iforest | rforest
+  challenge_budget: 0.20      # one of thresholds.operating_points, all chosen on the validation period
+  trust_forwarded_headers: true  # LOCAL DEMO ONLY: allows simulated IPs via X-Forwarded-For
+  allow_simulated_context: true  # LOCAL DEMO ONLY: lets the sign-in lab choose country, device and time of day
+  host: 127.0.0.1
+  port: 3000          # web app (5000 is taken by macOS AirPlay)
+  engine_port: 8001   # local scoring service the web app calls
