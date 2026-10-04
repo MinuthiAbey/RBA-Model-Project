@@ -8,7 +8,7 @@ import requests
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from attack import stuffing  # noqa: E402
-from service.events import DEMO_AGENTS  # noqa: E402
+from api.events import DEMO_AGENTS  # noqa: E402
 
 TARGET = "http://127.0.0.1:3000"
 

@@ -10,9 +10,9 @@ from engine.config import load_config
 from engine.decision import Threshold, Thresholds
 from engine.history import InMemoryHistory
 from engine.scorers.rules import RuleScorer
-from service.events import DEMO_AGENTS, build_event, describe_agent, locate
-from service.seed import seed_history
-from service.server import DemoEngine, make_handler
+from api.events import DEMO_AGENTS, build_event, describe_agent, locate
+from api.seed import seed_history
+from api.server import DemoEngine, make_handler
 
 MAC, ANDROID = DEMO_AGENTS["mac_chrome"], DEMO_AGENTS["android_opera"]
 

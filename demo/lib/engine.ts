@@ -1,6 +1,6 @@
 import type { EngineContext, EngineScore, LabOptions, Profile, Simulation } from "./types";
 
-// The Python risk engine runs as a small local service (`python -m service.server`).
+// The Python risk engine runs as a small local scoring API (`python -m api.server`).
 const ENGINE_URL = process.env.ENGINE_URL ?? "http://127.0.0.1:8001";
 
 export type LoginRequest = {

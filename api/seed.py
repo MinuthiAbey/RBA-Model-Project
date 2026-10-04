@@ -3,7 +3,7 @@
 from datetime import datetime, timedelta
 
 from engine.history import HistoryStore
-from service.events import DEMO_AGENTS, build_event
+from api.events import DEMO_AGENTS, build_event
 
 # alice is a regular (Norway, Mac), bob is fairly new (UK, iPhone), charlie has never logged in (cold start).
 ACCOUNTS = {

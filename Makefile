@@ -32,7 +32,7 @@ research: data attacks train evaluate figures
 # Risk engine service + DemoShop web app (shop, sign-in and /dashboard). Ctrl+C stops both.
 demo:
 	@trap 'kill 0' INT TERM EXIT; \
-	$(PY) -m service.server & \
+	$(PY) -m api.server & \
 	cd demo && npm run dev
 
 attack:

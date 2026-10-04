@@ -1,4 +1,4 @@
-# Local scoring service for the LightRBA web app. It holds the login history in memory and binds to 127.0.0.1 only.
+# Local scoring API for the LightRBA web app. It holds the login history in memory and binds to 127.0.0.1 only.
 
 import json
 import random
@@ -18,8 +18,8 @@ from engine.history import HistoryStore, InMemoryHistory
 from engine.scorers.base import Scorer
 from engine.trust import apply_trust
 from engine.types import LoginEvent
-from service.events import DEVICES, LOCATIONS, build_event, device_name
-from service.seed import ACCOUNTS, seed_history
+from api.events import DEVICES, LOCATIONS, build_event, device_name
+from api.seed import ACCOUNTS, seed_history
 
 MODELS = PROJECT_ROOT / "models"
 
