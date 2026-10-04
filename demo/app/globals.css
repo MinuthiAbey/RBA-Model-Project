@@ -1,0 +1,3 @@
+/* MUI sits between Tailwind's reset and its utilities: MUI styles beat the reset, layout utilities beat MUI. */
+@layer theme, base, mui, components, utilities;
+@import "tailwindcss";
