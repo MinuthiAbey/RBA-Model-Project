@@ -1,0 +1,12 @@
+pandas
+numpy
+pyarrow
+duckdb
+scikit-learn
+joblib
+matplotlib
+pyyaml
+tqdm
+user-agents
+requests
+pytest
