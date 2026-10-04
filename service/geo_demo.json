@@ -1,0 +1,9 @@
+[
+  {"range": "192.0.2.0/24", "country": "NO", "asn": 29695},
+  {"range": "198.51.100.0/24", "country": "US", "asn": 393398},
+  {"range": "203.0.113.0/24", "country": "DE", "asn": 9063},
+  {"range": "172.16.0.0/12", "country": "GB", "asn": 29550},
+  {"range": "10.0.0.0/8", "country": "NO", "asn": 41164},
+  {"range": "192.168.0.0/16", "country": "NO", "asn": 41164},
+  {"range": "127.0.0.0/8", "country": "NO", "asn": 41164}
+]

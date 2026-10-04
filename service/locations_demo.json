@@ -1,0 +1,12 @@
+[
+  {"country": "NO", "name": "Norway", "asns": [29695, 41164]},
+  {"country": "US", "name": "United States", "asns": [393398, 11427]},
+  {"country": "PL", "name": "Poland", "asns": [205727, 49528]},
+  {"country": "BR", "name": "Brazil", "asns": [29695, 22689]},
+  {"country": "GB", "name": "United Kingdom", "asns": [29550, 43948]},
+  {"country": "DE", "name": "Germany", "asns": [9063, 34240]},
+  {"country": "UA", "name": "Ukraine", "asns": [43309, 28907]},
+  {"country": "IN", "name": "India", "asns": [45775, 132996]},
+  {"country": "AU", "name": "Australia", "asns": [60117, 3949]},
+  {"country": "ID", "name": "Indonesia", "asns": [58397, 23679]}
+]
