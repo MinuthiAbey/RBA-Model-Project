@@ -4,8 +4,9 @@ __pycache__/
 *.pyc
 .pytest_cache/
 
-# Dataset (never committed; see docs/RUNNING.md for how to get it)
+# The dataset and generated results live outside the code folder (config.yaml paths)
 data/
+results/
 
 # Demo database and secrets
 *.db

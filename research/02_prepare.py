@@ -8,12 +8,12 @@ import numpy as np
 import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from engine.config import PROJECT_ROOT, load_config  # noqa: E402
+from engine.config import configured_path, load_config  # noqa: E402
 
-RAW_CSV = PROJECT_ROOT / "data" / "raw" / "rba-dataset.csv"
-PROCESSED = PROJECT_ROOT / "data" / "processed"
+RAW_CSV = configured_path("data") / "raw" / "rba-dataset.csv"
+PROCESSED = configured_path("data") / "processed"
 FULL_PARQUET = PROCESSED / "rba-full.parquet"
-TABLES = PROJECT_ROOT / "results" / "tables"
+TABLES = configured_path("results") / "tables"
 
 COLUMNS = {
     "index": "row_id",

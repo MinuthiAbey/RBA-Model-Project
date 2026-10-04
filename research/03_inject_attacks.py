@@ -8,10 +8,10 @@ import numpy as np
 import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from engine.config import PROJECT_ROOT, load_config  # noqa: E402
+from engine.config import configured_path, load_config  # noqa: E402
 
-PROCESSED = PROJECT_ROOT / "data" / "processed"
-TABLES = PROJECT_ROOT / "results" / "tables"
+PROCESSED = configured_path("data") / "processed"
+TABLES = configured_path("results") / "tables"
 OUTPUT = PROCESSED / "attacks_test.parquet"
 
 NETWORK = ["ip", "asn", "country", "region", "city", "rtt_ms"]

@@ -8,14 +8,14 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from engine.config import PROJECT_ROOT
+from engine.config import PROJECT_ROOT, configured_path
 from engine.history import HistoryStore
 from engine.types import LoginEvent
 
-PROCESSED = PROJECT_ROOT / "data" / "processed"
+PROCESSED = configured_path("data") / "processed"
 MODELS = PROJECT_ROOT / "models"
-TABLES = PROJECT_ROOT / "results" / "tables"
-FIGURES = PROJECT_ROOT / "results" / "figures"
+TABLES = configured_path("results") / "tables"
+FIGURES = configured_path("results") / "figures"
 SCORERS = ["rules", "freeman", "iforest", "rforest"]
 
 

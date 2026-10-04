@@ -1,4 +1,7 @@
 seed: 42
+paths:              # the dataset and generated results live outside the code folder
+  data: ../data
+  results: ../results
 sample_users: 300000
 splits: {train: 0.6, val: 0.2, test: 0.2}
 cold_start_buckets: [[0,0],[1,2],[3,5],[6,10],[11,20],[21,null]]

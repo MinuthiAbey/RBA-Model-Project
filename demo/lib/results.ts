@@ -2,8 +2,8 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 
 // The landing page quotes the research results straight from the tables `make research` writes,
-// so the numbers on screen can never drift from the evaluation.
-const TABLES = path.join(process.cwd(), "..", "results", "tables");
+// so the numbers on screen can never drift from the evaluation. They live outside the code folder (config.yaml paths).
+const TABLES = path.join(process.env.RESULTS_DIR ?? path.join(process.cwd(), "..", "..", "results"), "tables");
 
 type Row = Record<string, string>;
 

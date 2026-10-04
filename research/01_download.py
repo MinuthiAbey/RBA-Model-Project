@@ -8,8 +8,10 @@ from pathlib import Path
 import requests
 from tqdm import tqdm
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
-RAW_DIR = PROJECT_ROOT / "data" / "raw"
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from engine.config import configured_path  # noqa: E402
+
+RAW_DIR = configured_path("data") / "raw"
 ZIP_PATH = RAW_DIR / "rba-dataset.zip"
 CSV_PATH = RAW_DIR / "rba-dataset.csv"
 

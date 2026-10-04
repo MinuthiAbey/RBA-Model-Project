@@ -17,7 +17,7 @@ from engine.features import FEATURES, extract  # noqa: E402
 from engine.history import InMemoryHistory  # noqa: E402
 from engine.scorers.base import Scorer  # noqa: E402
 from engine.scorers.rules import RULES, RuleScorer  # noqa: E402
-from research.common import MODELS, PROCESSED, SCORERS, classify, load_period, replay, save_table  # noqa: E402
+from research.common import MODELS, PROCESSED, SCORERS, TABLES, classify, load_period, replay, save_table  # noqa: E402
 
 LATENCY_SAMPLE = 2000
 # Each real or simulated attack population is compared against the same legitimate logins.
@@ -245,7 +245,7 @@ def main() -> int:
     table, latency = score_test_period(scorers, history, logins, config["seed"])
     add_scores(table, scorers, thresholds)
     table["bucket"] = bucket_labels(table["prior_logins"].to_numpy(), buckets)
-    table.to_parquet(PROCESSED.parent.parent / "results" / "tables" / "test_scores.parquet", index=False)
+    table.to_parquet(TABLES / "test_scores.parquet", index=False)
 
     overall = overall_table(table)
     cold_start = cold_start_table(table, bucket_order)
