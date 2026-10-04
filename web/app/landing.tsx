@@ -20,9 +20,9 @@ const pct = (value: number) => `${Math.round(value * 100)}%`;
 
 // What the live demo decided for these three sign-ins.
 const EXAMPLES = [
-  { who: "alice · Norway · her usual Mac", risk: 10, label: "Allowed", color: "success" as const },
-  { who: "alice · United States · new Android phone", risk: 91, label: "One-time code", color: "warning" as const },
-  { who: "attacker · leaked password · 3 wrong codes", risk: 91, label: "Blocked", color: "error" as const },
+  { who: "alice · Norway · usual Mac", risk: 21, label: "Allowed", color: "success" as const },
+  { who: "alice · United States · new Android phone", risk: 93, label: "One-time code", color: "warning" as const },
+  { who: "attacker · leaked password · 3 wrong codes", risk: 99, label: "Blocked", color: "error" as const },
 ];
 
 const FEATURES = [
