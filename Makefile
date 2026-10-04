@@ -9,7 +9,7 @@ setup:
 	$(PYTHON) -m venv $(VENV)
 	$(PY) -m pip install --upgrade pip
 	$(PY) -m pip install -r requirements.txt
-	cd demo && npm install
+	cd web && npm install
 
 data:
 	$(PY) -m pipeline.download
@@ -29,11 +29,11 @@ figures:
 
 research: data attacks train evaluate figures
 
-# Risk engine service + LightRBA web app (shop, sign-in and /dashboard). Ctrl+C stops both.
+# Scoring API + LightRBA web platform (landing page, sign-in lab, dashboard). Ctrl+C stops both.
 demo:
 	@trap 'kill 0' INT TERM EXIT; \
 	$(PY) -m api.server & \
-	cd demo && npm run dev
+	cd web && npm run dev
 
 attack:
 	$(PY) -m tools.attack_simulator

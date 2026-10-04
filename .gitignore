@@ -14,7 +14,7 @@ results/
 
 # Web app
 node_modules/
-demo/.next/
+web/.next/
 *.tsbuildinfo
 
 # Model files over 50 MB are listed here by name once they exist
