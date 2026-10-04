@@ -11,7 +11,8 @@ from engine.decision import Threshold, Thresholds
 from engine.history import InMemoryHistory
 from engine.scorers.rules import RuleScorer
 from api.events import DEMO_AGENTS, build_event, describe_agent, locate
-from api.seed import seed_history
+from api.database import Database
+from api.seed import seed_database, seed_history
 from api.server import DemoEngine, make_handler
 
 MAC, ANDROID = DEMO_AGENTS["mac_chrome"], DEMO_AGENTS["android_opera"]
@@ -181,3 +182,42 @@ def test_a_plain_allow_does_not_create_trust(engine):
     result = login(engine, "192.0.2.10")
     engine.confirm({"event_id": result["event_id"]})
     assert engine.profiles()["alice"]["trusted"] == []
+
+
+def engine_on(database):
+    thresholds = {"rules": {"0.1": Thresholds(otp=Threshold(25), block=Threshold(80))}}
+    return DemoEngine({"rules": RuleScorer(load_config()["rules"])}, thresholds, "rules", "0.1", InMemoryHistory(),
+                      trust_forwarded=True, database=database)
+
+
+def test_accounts_and_history_survive_a_restart(tmp_path):
+    database = Database(tmp_path / "platform.db")
+    seed_database(database, datetime.now())
+    first = engine_on(database)
+    assert first.check_password({"username": "alice", "password": "demo1234"}) == {"ok": True}
+    assert first.check_password({"username": "alice", "password": "wrong"}) == {"ok": False}
+    assert first.register({"username": "zoe", "password": "longpass1", "forwarded_for": "192.0.2.10", "user_agent": MAC})["created"]
+    result = login(first, "192.0.2.10", username="zoe")
+    first.confirm({"event_id": result["event_id"], "verified": True})
+
+    restarted = engine_on(Database(tmp_path / "platform.db"))
+    profiles = restarted.profiles()
+    assert list(profiles)[:3] == ["alice", "bob", "charlie"] and list(profiles)[-1] == "zoe"
+    assert profiles["zoe"]["logins"] == 2 and profiles["zoe"]["trusted"]
+    assert profiles["alice"]["logins"] == 20 and profiles["alice"]["usual"]["hour"] == 9
+
+
+def test_sign_up_rules(tmp_path):
+    engine = engine_on(Database(tmp_path / "platform.db"))
+    body = {"forwarded_for": "192.0.2.10", "user_agent": MAC}
+    assert engine.register({**body, "username": "Zo", "password": "longpass1"})["created"] is False
+    assert engine.register({**body, "username": "zoe", "password": "short"})["created"] is False
+    assert engine.register({**body, "username": "zoe", "password": "longpass1"})["created"] is True
+    assert engine.register({**body, "username": "zoe", "password": "longpass1"})["error"] == "That username is taken."
+
+
+def test_seeded_profiles_differ():
+    history = InMemoryHistory()
+    seed_history(history, datetime.now())
+    usual = {name: history.get_user(name).most_common("country") for name in ["alice", "diana", "hana", "jun"]}
+    assert usual == {"alice": "NO", "diana": "US", "hana": "PL", "jun": "IN"}

@@ -2,6 +2,7 @@
 
 import json
 import random
+import re
 import threading
 import time
 import uuid
@@ -10,7 +11,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 import joblib
 
-from engine.config import PROJECT_ROOT, load_config
+from engine.config import PROJECT_ROOT, configured_path, load_config
 from engine.decision import Threshold, Thresholds, decide, thresholds_from_dict
 from engine.explainer import explain
 from engine.features import typical_hour
@@ -18,15 +19,19 @@ from engine.history import HistoryStore, InMemoryHistory
 from engine.scorers.base import Scorer
 from engine.trust import apply_trust
 from engine.types import LoginEvent
+from api.database import Database
 from api.events import DEVICES, LOCATIONS, build_event, device_name
-from api.seed import ACCOUNTS, seed_history
+from api.seed import ACCOUNTS, seed_database
 
 MODELS = PROJECT_ROOT / "models"
+USERNAME = re.compile(r"^[a-z0-9_]{3,20}$")
+MIN_PASSWORD = 8
 
 
 class DemoEngine:
     def __init__(self, scorers: dict[str, Scorer], thresholds: dict[str, dict[str, Thresholds]], default_scorer: str,
-                 default_budget: str, history: HistoryStore, trust_forwarded: bool, allow_simulated: bool = False) -> None:
+                 default_budget: str, history: HistoryStore, trust_forwarded: bool, allow_simulated: bool = False,
+                 database: Database | None = None) -> None:
         self.scorers = scorers
         self.thresholds = thresholds  # scorer -> challenge budget -> thresholds, all chosen on the validation period
         self.default_scorer = default_scorer
@@ -37,6 +42,24 @@ class DemoEngine:
         self.pending: dict[str, LoginEvent] = {}  # scored logins waiting for allow/OTP success
         self.clock = datetime.now()
         self.lock = threading.Lock()
+        self.database = database
+        if database:
+            self.replay(database)
+
+    def replay(self, database: Database) -> None:
+        # Rebuild the in-memory history from every stored event, in the order they happened.
+        for kind, event in database.events():
+            if kind == "login":
+                self.history.update(event)
+            elif kind == "attempt":
+                self.history.record_attempt(event)
+            else:
+                self.history.trust(event)
+            self.clock = max(self.clock, event.timestamp)
+
+    def save(self, kind: str, event: LoginEvent) -> None:
+        if self.database:
+            self.database.record(kind, event)
 
     @classmethod
     def from_models(cls, config: dict) -> "DemoEngine":
@@ -47,9 +70,11 @@ class DemoEngine:
                              for budget, point in saved[name]["operating_points"].items()}
                       for name in saved}
         history = InMemoryHistory(joblib.load(MODELS / "global_freqs.joblib"))
-        seed_history(history, datetime.now())
+        database = Database(configured_path("database"))
+        if not database.usernames():
+            seed_database(database, datetime.now())
         return cls(scorers, thresholds, config["demo"]["active_scorer"], str(config["demo"]["challenge_budget"]), history,
-                   config["demo"]["trust_forwarded_headers"], config["demo"]["allow_simulated_context"])
+                   config["demo"]["trust_forwarded_headers"], config["demo"]["allow_simulated_context"], database)
 
     def now(self, hour: int | None = None) -> datetime:
         # The demo clock only moves forward, so the history stays in time order even when the lab
@@ -97,6 +122,7 @@ class DemoEngine:
         elapsed_ms = (time.perf_counter() - started) * 1000
         comparison = self.compare(event, budget, draw) if body.get("compare") else None
         self.history.record_attempt(event)
+        self.save("attempt", event)
         event_id = uuid.uuid4().hex
         self.pending[event_id] = event
         return {
@@ -132,6 +158,7 @@ class DemoEngine:
         event = self.event_from(body, success=False)
         prior_logins = self.history.get_user(event.user_id).login_count
         self.history.record_attempt(event)
+        self.save("attempt", event)
         return {"context": context(event, prior_logins)}
 
     def confirm(self, body: dict) -> dict:
@@ -140,17 +167,36 @@ class DemoEngine:
         event = self.pending.pop(body["event_id"], None)
         if event:
             self.history.update(event)
+            self.save("login", event)
             if body.get("verified"):
                 self.history.trust(event)
+                self.save("trust", event)
         return {"confirmed": event is not None}
 
     def discard(self, body: dict) -> dict:
         return {"discarded": self.pending.pop(body["event_id"], None) is not None}
 
+    def check_password(self, body: dict) -> dict:
+        return {"ok": bool(self.database) and self.database.check_password(body["username"], body["password"])}
+
+    def register(self, body: dict) -> dict:
+        # A new account; its sign-up conditions become its first known sign-in.
+        username, password = body["username"], body["password"]
+        if not USERNAME.match(username):
+            return {"created": False, "error": "Use 3–20 lowercase letters, digits or underscores."}
+        if len(password) < MIN_PASSWORD:
+            return {"created": False, "error": f"Use a password of at least {MIN_PASSWORD} characters."}
+        event = self.event_from(body, success=True)
+        if not self.database or not self.database.add_account(username, password, event.timestamp):
+            return {"created": False, "error": "That username is taken."}
+        self.history.update(event)
+        self.save("login", event)
+        return {"created": True, "context": context(event, 0)}
+
     def profiles(self) -> dict:
-        # What each demo user's normal sign-in looks like, straight from the history the engine has learned.
+        # What each user's normal sign-in looks like, straight from the history the engine has learned.
         result = {}
-        for username in ACCOUNTS:
+        for username in self.database.usernames() if self.database else ACCOUNTS:
             user = self.history.get_user(username)
             hour = typical_hour(user.hour_counts)
             usual = None
@@ -184,8 +230,8 @@ def context(event: LoginEvent, prior_logins: int) -> dict:
 
 
 def make_handler(engine: DemoEngine, info: dict):
-    posts = {"/score": engine.score, "/failed": engine.record_failure,
-             "/confirm": engine.confirm, "/discard": engine.discard}
+    posts = {"/score": engine.score, "/failed": engine.record_failure, "/confirm": engine.confirm,
+             "/discard": engine.discard, "/accounts/check": engine.check_password, "/accounts/register": engine.register}
     gets = {"/info": lambda: info, "/profiles": engine.profiles, "/options": engine.options}
 
     class Handler(BaseHTTPRequestHandler):
