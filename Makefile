@@ -12,20 +12,20 @@ setup:
 	cd demo && npm install
 
 data:
-	$(PY) research/01_download.py
-	$(PY) research/02_prepare.py
+	$(PY) -m pipeline.download
+	$(PY) -m pipeline.prepare
 
 attacks:
-	$(PY) research/03_inject_attacks.py
+	$(PY) -m pipeline.simulate_attacks
 
 train:
-	$(PY) research/04_train.py
+	$(PY) -m pipeline.train
 
 evaluate:
-	$(PY) research/05_evaluate.py
+	$(PY) -m pipeline.evaluate
 
 figures:
-	$(PY) research/06_figures.py
+	$(PY) -m pipeline.figures
 
 research: data attacks train evaluate figures
 

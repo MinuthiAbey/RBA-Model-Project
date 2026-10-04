@@ -2,13 +2,11 @@
 # Every field is copied from a real login in the sample, and these rows never enter any user's history.
 
 import sys
-from pathlib import Path
 
 import numpy as np
 import pandas as pd
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from engine.config import configured_path, load_config  # noqa: E402
+from engine.config import configured_path, load_config
 
 PROCESSED = configured_path("data") / "processed"
 TABLES = configured_path("results") / "tables"

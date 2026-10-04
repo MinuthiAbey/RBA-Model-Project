@@ -1,18 +1,16 @@
 # Draws the result figures (300 dpi PNG) from the evaluation tables.
 
 import sys
-from pathlib import Path
 
 import matplotlib
 
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-import numpy as np  # noqa: E402
-import pandas as pd  # noqa: E402
-from sklearn.metrics import roc_auc_score, roc_curve  # noqa: E402
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+from sklearn.metrics import roc_auc_score, roc_curve
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from research.common import FIGURES, SCORERS, TABLES  # noqa: E402
+from pipeline.common import FIGURES, SCORERS, TABLES
 
 # One fixed colour and marker per scorer in every figure; markers keep series apart without colour.
 STYLE = {

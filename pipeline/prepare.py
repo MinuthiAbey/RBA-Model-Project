@@ -1,14 +1,12 @@
 # Converts the raw CSV to Parquet, samples users and splits the logins by time into train/val/test.
 
 import sys
-from pathlib import Path
 
 import duckdb
 import numpy as np
 import pandas as pd
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from engine.config import configured_path, load_config  # noqa: E402
+from engine.config import configured_path, load_config
 
 RAW_CSV = configured_path("data") / "raw" / "rba-dataset.csv"
 PROCESSED = configured_path("data") / "processed"
@@ -99,7 +97,7 @@ def login_count_table(con: duckdb.DuckDBPyConnection) -> pd.DataFrame:
 
 def main() -> int:
     if not RAW_CSV.exists() and not FULL_PARQUET.exists():
-        print(f"{RAW_CSV} not found. Run research/01_download.py first.", file=sys.stderr)
+        print(f"{RAW_CSV} not found. Run `make data` first.", file=sys.stderr)
         return 1
     config = load_config()
     PROCESSED.mkdir(parents=True, exist_ok=True)

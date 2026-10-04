@@ -3,21 +3,19 @@
 import json
 import sys
 import time
-from pathlib import Path
 
 import joblib
 import numpy as np
 import pandas as pd
 from sklearn.metrics import roc_auc_score, roc_curve
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from engine.config import load_config  # noqa: E402
-from engine.decision import Threshold, thresholds_from_dict, threshold_for_rate  # noqa: E402
-from engine.features import FEATURES, extract  # noqa: E402
-from engine.history import InMemoryHistory  # noqa: E402
-from engine.scorers.base import Scorer  # noqa: E402
-from engine.scorers.rules import RULES, RuleScorer  # noqa: E402
-from research.common import MODELS, PROCESSED, SCORERS, TABLES, classify, load_period, replay, save_table  # noqa: E402
+from engine.config import load_config
+from engine.decision import Threshold, thresholds_from_dict, threshold_for_rate
+from engine.features import FEATURES, extract
+from engine.history import InMemoryHistory
+from engine.scorers.base import Scorer
+from engine.scorers.rules import RULES, RuleScorer
+from pipeline.common import MODELS, PROCESSED, SCORERS, TABLES, classify, load_period, replay, save_table
 
 LATENCY_SAMPLE = 2000
 # Each real or simulated attack population is compared against the same legitimate logins.

@@ -1,10 +1,8 @@
-import importlib
-
 import numpy as np
 import pandas as pd
 import pytest
 
-attacks = importlib.import_module("research.03_inject_attacks")
+from pipeline import simulate_attacks as attacks
 
 
 def test_bucket_window():

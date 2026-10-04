@@ -4,23 +4,21 @@ import json
 import sys
 import time
 from dataclasses import asdict
-from pathlib import Path
 
 import joblib
 import numpy as np
 import pandas as pd
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from engine.calibration import Calibrator  # noqa: E402
-from engine.config import load_config  # noqa: E402
-from engine.decision import choose_thresholds, threshold_for_rate  # noqa: E402
-from engine.features import extract  # noqa: E402
-from engine.history import GlobalFrequencies, InMemoryHistory  # noqa: E402
-from engine.scorers.freeman import FreemanScorer  # noqa: E402
-from engine.scorers.iforest import IsolationForestScorer  # noqa: E402
-from engine.scorers.rforest import RandomForestScorer  # noqa: E402
-from engine.scorers.rules import RuleScorer  # noqa: E402
-from research.common import MODELS, PROCESSED, classify, load_period, replay, save_table, to_events  # noqa: E402
+from engine.calibration import Calibrator
+from engine.config import load_config
+from engine.decision import choose_thresholds, threshold_for_rate
+from engine.features import extract
+from engine.history import GlobalFrequencies, InMemoryHistory
+from engine.scorers.freeman import FreemanScorer
+from engine.scorers.iforest import IsolationForestScorer
+from engine.scorers.rforest import RandomForestScorer
+from engine.scorers.rules import RuleScorer
+from pipeline.common import MODELS, PROCESSED, classify, load_period, replay, save_table, to_events
 
 SCORED_KINDS = ["legit", "attack_ip", "ato"]
 
