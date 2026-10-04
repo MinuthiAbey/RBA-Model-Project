@@ -15,7 +15,7 @@ import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import type { LabResult } from "@/lib/types";
 import { SCORER_NAMES } from "./engine-settings";
-import { flag } from "./labels";
+import { flag } from "../labels";
 
 const VIEW = {
   allow: { label: "Allowed", tone: "success", user: "Signed in. Nothing unusual, so no extra step." },

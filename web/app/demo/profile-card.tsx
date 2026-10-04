@@ -12,7 +12,7 @@ import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import type { LabOptions, Profile } from "@/lib/types";
-import { countryName, flag, hourLabel } from "./labels";
+import { countryName, flag, hourLabel } from "../labels";
 
 function Row({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
