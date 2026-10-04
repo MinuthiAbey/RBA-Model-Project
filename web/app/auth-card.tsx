@@ -10,13 +10,14 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 // Shared card for the sign-in and one-time-code steps: posts JSON and follows the `next` page the API returns.
-export default function AuthCard({ title, intro, action, submitLabel, values, children }: {
+export default function AuthCard({ title, intro, action, submitLabel, values, children, footer }: {
   title: string;
   intro: string;
   action: string;
   submitLabel: string;
-  values: Record<string, string>;
+  values: Record<string, unknown>;
   children: React.ReactNode;
+  footer?: React.ReactNode;
 }) {
   const router = useRouter();
   const [error, setError] = useState("");
@@ -46,6 +47,7 @@ export default function AuthCard({ title, intro, action, submitLabel, values, ch
         <Button type="submit" variant="contained" size="large" fullWidth disabled={busy} sx={{ mt: 3 }}>
           {busy ? "Checking…" : submitLabel}
         </Button>
+        {footer && <Box sx={{ mt: 2, textAlign: "center" }}>{footer}</Box>}
       </CardContent>
     </Card>
   );

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { forbidden, sameOrigin, setPendingOtp, setSession } from "@/lib/http";
 import { attemptSignIn } from "@/lib/login";
+import type { Simulation } from "@/lib/types";
 
 const WRONG_PASSWORD = "Wrong username or password.";
 const BLOCKED = "We couldn't sign you in right now. Please try again later.";
@@ -13,6 +14,7 @@ export async function POST(request: Request) {
     forwarded_for: request.headers.get("x-forwarded-for"),
     remote_addr: "127.0.0.1",
     user_agent: request.headers.get("user-agent"),
+    simulate: body.simulate as Simulation | undefined, // conditions chosen on the sign-in page
   };
 
   try {
