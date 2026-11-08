@@ -26,3 +26,7 @@ models/rforest.joblib
 .DS_Store
 .idea/
 .vscode/
+
+# Files the notebook writes when it runs (cleaned Parquet copies and figures)
+notebook/work/
+notebook/figures/
