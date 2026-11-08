@@ -8,8 +8,8 @@ PY := $(VENV)/bin/python
 setup:
 	$(PYTHON) -m venv $(VENV)
 	$(PY) -m pip install --upgrade pip
-	$(PY) -m pip install -r requirements.txt
-	cd web && npm install
+	$(PY) -m pip install -r requirements.lock  # exact versions; requirements.txt lists the direct dependencies
+	cd web && npm ci
 
 data:
 	$(PY) -m pipeline.download
